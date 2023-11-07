@@ -1,0 +1,15 @@
+{
+  "name": "mesto-project-ff",
+  "version": "1.0.0",
+  "license": "ISC",
+  "scripts": {
+    "check": "prettier --check './**/*.{html,css,js}'",
+    "format": "prettier --write './**/*.{html,css,js}'",
+    "lint": "stylelint '**/*.css'",
+    "lintfix": "stylelint '**/*.css' --fix"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.2",
+    "stylelint": "^15.10.3"
+  }
+}
