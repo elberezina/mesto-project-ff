@@ -73,7 +73,7 @@ function handleNewCardSubmit(evt) {
   evt.target.reset();
 }
 
-function profileModalForm() {
+function openProfileModal() {
   openModal(profileModal);
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
@@ -86,7 +86,7 @@ popupList.forEach((popup) => {
 newCardButton.addEventListener('click', function () {
   openModal(newCardModal);
 });
-profileButton.addEventListener('click', profileModalForm);
+profileButton.addEventListener('click', openProfileModal);
 formElementProfile.addEventListener('submit', handleProfileSubmit);
 formElementCard.addEventListener('submit', handleNewCardSubmit);
 closeProfileModalButton.addEventListener('click', () =>
