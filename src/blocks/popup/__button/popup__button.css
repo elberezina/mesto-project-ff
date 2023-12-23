@@ -10,13 +10,22 @@
   background: #000;
   border-radius: 2px;
   border: none;
-  transition: visibility 0s, background 0.3s;
+  transition:
+    visibility 0s,
+    background 0.3s;
   margin-top: 48px;
 }
 
 .popup__button:hover {
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
+  color: white;
+}
+
+.popup__button_disabled {
+  background-color: transparent;
+  color: #c4c4c4;
+  border: 1px solid #c4c4c4;
 }
 
 @media screen and (max-width: 568px) {

@@ -7,3 +7,6 @@ HTML
 CSS
 JavaScript
 Webpack.
+
+## GitHub Pages
+[https://elberezina.github.io/mesto-project-ff](https://elberezina.github.io/mesto-project-ff)
