@@ -10,8 +10,7 @@ function closeModal(popup) {
 
 function handleCloseModalOverlay(evt) {
   if (evt.target.classList.contains('popup_is-opened')) {
-    const modalOpened = document.querySelector('.popup_is-opened');
-    closeModal(modalOpened);
+    closeModal(evt.target);
   }
 }
 

@@ -43,9 +43,6 @@ const profileJob = document.querySelector('.profile__description');
 const closeAvatarModalButton = avatarModal.querySelector('.popup__close');
 const closeProfileModalButton = profileModal.querySelector('.popup__close');
 const closeNewCardModalButton = newCardModal.querySelector('.popup__close');
-const avatarButtonSave = avatarModal.querySelector('.popup__button');
-const profileButtonSave = profileModal.querySelector('.popup__button');
-const newCardButtonSave = newCardModal.querySelector('.popup__button');
 
 const closeCardModalButton = cardModal.querySelector('.popup__close');
 const popupList = [profileModal, newCardModal, cardModal, avatarModal];
@@ -97,71 +94,74 @@ function showCardInModal(card) {
 }
 
 function handleUpdateAvatarSubmit(evt) {
-  evt.preventDefault();
-
-  renderLoading(avatarButtonSave, true);
-  api
-    .updateAvatar(avatarUrlInput.value)
-    .then((result) => {
+  function makeRequest() {
+    return api.updateAvatar(avatarUrlInput.value).then((result) => {
       profileImage.style.backgroundImage = `url(\\${result.avatar})`;
       closeModal(avatarModal);
-    })
-    .catch((err) => console.error(`Ошибка обновления аватара ${err}`))
-    .finally(() => {
-      renderLoading(avatarButtonSave, false);
     });
-
-  evt.target.reset();
+  }
+  handleSubmit(makeRequest, evt);
 }
 
 function handleProfileSubmit(evt) {
-  evt.preventDefault();
-
-  renderLoading(profileButtonSave, true);
-  api
-    .updateProfile(nameInput.value, jobInput.value)
-    .then((result) => {
+  function makeRequest() {
+    return api.updateProfile(nameInput.value, jobInput.value).then((result) => {
       profileName.textContent = result.name;
       profileJob.textContent = result.about;
       closeModal(profileModal);
-    })
-    .catch((err) => console.error(`Ошибка обновления профиля ${err}`))
-    .finally(() => {
-      renderLoading(profileButtonSave, false);
     });
+  }
+  handleSubmit(makeRequest, evt);
 }
 
 function handleNewCardSubmit(evt) {
-  evt.preventDefault();
-  renderLoading(newCardButtonSave, true);
-  api
-    .addCard(newCardNameInput.value, newCardLinkInput.value)
-    .then((card) => {
-      cardsContainer.prepend(
-        createCard(
-          card,
-          handleDeleteCard,
-          handleLikeCard,
-          showCardInModal,
-          profileId
-        )
-      );
-      closeModal(newCardModal);
-    })
-    .catch((err) => console.error(`Ошибка добавления карты ${err}`))
-    .finally(() => {
-      renderLoading(newCardButtonSave, false);
-    });
-
-  evt.target.reset();
+  function makeRequest() {
+    return api
+      .addCard(newCardNameInput.value, newCardLinkInput.value)
+      .then((card) => {
+        cardsContainer.prepend(
+          createCard(
+            card,
+            handleDeleteCard,
+            handleLikeCard,
+            showCardInModal,
+            profileId
+          )
+        );
+        closeModal(newCardModal);
+      });
+  }
+  handleSubmit(makeRequest, evt);
 }
 
-function renderLoading(submitButton, isLoading) {
+function renderLoading(
+  submitButton,
+  isLoading,
+  buttonText = 'Сохранить',
+  loadingText = 'Сохранение...'
+) {
   if (isLoading) {
-    submitButton.textContent = 'Сохранение...';
+    submitButton.textContent = loadingText;
   } else {
-    submitButton.textContent = 'Сохранить';
+    submitButton.textContent = buttonText;
   }
+}
+
+function handleSubmit(request, evt, loadingText = 'Сохранение...') {
+  evt.preventDefault();
+  const submitButton = evt.submitter;
+  const initialText = submitButton.textContent;
+  renderLoading(submitButton, true, initialText, loadingText);
+  request()
+    .then(() => {
+      evt.target.reset();
+    })
+    .catch((err) => {
+      console.error(`Ошибка: ${err}`);
+    })
+    .finally(() => {
+      renderLoading(submitButton, false, initialText);
+    });
 }
 
 popupList.forEach((popup) => {
